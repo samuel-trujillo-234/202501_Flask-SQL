@@ -1,5 +1,5 @@
 # Importamos la función que devolverá una instancia de una conexión
-from mysqlconnection import connectToMySQL
+from usuarios_CR.config.mysqlconnection import connectToMySQL
 
 # Creamos la clase basada en la tabla de mascotas
 class Mascota:
@@ -11,19 +11,17 @@ class Mascota:
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
 
-    # Método de clase para obtener todas las mascotas
     @classmethod
     def get_all(cls):
         query = "SELECT * FROM mascotas;"
-
-        # Llamamos a la función connectToMySQL con el esquema al que te diriges
         resultados = connectToMySQL('primera_flask').query_db(query)
-
-        # Creamos una lista vacía para agregar nuestras instancias de mascota
         mascotas = []
-
-        # Iteramos sobre los resultados de la base de datos y creamos instancias de Mascota
         for mascota in resultados:
             mascotas.append(cls(mascota))
+        return mascotas  
 
-        return mascotas  # El return debe estar fuera del for
+    @classmethod
+
+    def save(cls, datos):
+        query = "INSERT INTO mascotas (nombre, tipo, color, created_at, updated_at) VALUES (%(nombre)s, %(tipo)s, %(color)s, NOW(), NOW());"
+        return connectToMySQL('primera_flask').query_db(query, datos)

@@ -1,40 +1,33 @@
 <!DOCTYPE html>
-<html lang="es">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mascotas</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            color: #333;
-        }
-        .mascota {
-            background: white;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-        }
-    </style>
 </head>
 
 <body>
-    <h1>Lista de Mascotas</h1>
-    <section>
-        {% for una_mascota in todas_mascotas %}
-        <div class="mascota">
-            <p><b>Nombre:</b> {{ una_mascota.nombre }}</p>
-            <p><b>Tipo:</b> {{ una_mascota.tipo }}</p>
-            <p><b>Color:</b> {{ una_mascota.color }}</p>
-        </div>
-        {% endfor %}
-    </section>
-</body>
+    <h1>Las mascotas:</h1>
+    {% for una_mascota in todas_mascotas %}
+    <p>
+        <b>Nombre:</b> {{una_mascota.nombre}} <br>
+        <b>Tipo:</b> {{una_mascota.tipo}} <br>
+        <b>Color:</b> {{una_mascota.color}} <br>
+    </p>
+    {% endfor %}
+    <hr>
 
+<h2>Agregar una mascota</h2>
+
+    <form action="/crear_mascota" method="POST">
+    <label>Nombre:</label>
+    <input type="text" name="nombre"><br>
+    <label>Tipo:</label>
+    <input type="text" name="tipo"><br>
+    <label>Color:</label>
+    <input type="text" name="color"><br>
+    <input type="submit" value="Agregar Mascota" >
+
+    </form>
+</body>
 </html>

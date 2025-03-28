@@ -1,10 +1,10 @@
-import pymysql.cursors #Utilizamos un cursos para interactuar con BD
-class MySQLConnection: #Clase que permite generar instancia de conexión con BD
+import pymysql.cursors 
+class MySQLConnection: 
     def __init__(self, db):
         connection = pymysql.connect(host = 'localhost',
                                     user = 'root', # Cambia el usuario y contraseña
                                     password = '2005', 
-                                    db = db,
+                                    db = 'usuarios',
                                     charset = 'utf8mb4',
                                     cursorclass = pymysql.cursors.DictCursor,
                                     autocommit = True)
