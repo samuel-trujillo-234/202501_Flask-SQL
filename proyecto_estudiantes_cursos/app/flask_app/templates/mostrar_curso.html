@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Estudiantes de {{ curso.nombre }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Estudiantes de {{ curso.nombre }}</h2>
+    
+    <table class="estudiantes-table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Edad</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for estudiante in estudiantes %}
+            <tr>
+                <td>{{ estudiante.nombre }}</td>
+                <td>{{ estudiante.apellido }}</td>
+                <td>{{ estudiante.edad }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div class="actions">
+        <a href="{{ url_for('cursos') }}" class="btn">Inicio</a>
+    </div>
+</div>
+{% endblock %}
