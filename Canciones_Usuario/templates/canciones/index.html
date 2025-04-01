@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block title %}Todas las Canciones{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Todas las Canciones</h2>
+    <a href="{{ url_for('cancion.nueva') }}" class="btn">Nueva Canción</a>
+</div>
+
+<div class="song-list">
+    {% if canciones %}
+        <ul>
+            {% for cancion in canciones %}
+                <li>
+                    <a href="{{ url_for('cancion.mostrar', id=cancion.id) }}">{{ cancion.titulo }} - {{ cancion.artista }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay canciones registradas.</p>
+    {% endif %}
+</div>
+
+<div class="navigation">
+    <a href="{{ url_for('index') }}">Inicio</a>
+</div>
+{% endblock %}
+

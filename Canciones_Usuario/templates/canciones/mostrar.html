@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{ cancion.titulo }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>{{ cancion.titulo }}</h2>
+</div>
+
+<div class="song-details">
+    <p><strong>Artista:</strong> {{ cancion.artista }}</p>
+</div>
+
+<div class="favorites-section">
+    <h3>En los favoritos de:</h3>
+    
+    {% if usuarios_favoritos %}
+        <ul>
+            {% for usuario in usuarios_favoritos %}
+                <li>
+                    <a href="{{ url_for('usuario.mostrar', id=usuario.id) }}">{{ usuario.nombre }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No está en favoritos de ningún usuario.</p>
+    {% endif %}
+</div>
+
+<div class="add-favorite-section">
+    <h3>Agregar a Favoritos</h3>
+    
+    <form method="POST" action="{{ url_for('favorito.agregar') }}">
+        <input type="hidden" name="cancion_id" value="{{ cancion.id }}">
+        
+        <div class="form-group">
+            <label for="usuario_id">Usuario:</label>
+            <select id="usuario_id" name="usuario_id" required>
+                {% for usuario in usuarios %}
+                    <option value="{{ usuario.id }}">{{ usuario.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn">Agregar</button>
+        </div>
+    </form>
+</div>
+
+<div class="navigation">
+    <a href="{{ url_for('cancion.index') }}">Volver a Canciones</a>
+    <a href="{{ url_for('cancion.editar', id=cancion.id) }}">Editar</a>
+    
+    <form method="POST" action="{{ url_for('cancion.eliminar', id=cancion.id) }}" class="inline-form">
+        <button type="submit" class="btn-danger" onclick="return confirm('¿Estás seguro de eliminar esta canción?')">Eliminar</button>
+    </form>
+</div>
+{% endblock %}
+
