@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Seguidores</title>
+</head>
+<body>
+    <h1>Seguidores</h1>
+    <ul>
+        {% for seguidor in seguidores %}
+        <li>{{ seguidor.nombre }} {{ seguidor.apellido }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('seguidores.nuevo', usuario_id=usuario_id) }}">Agregar Seguidor</a>
+</body>
+</html>
