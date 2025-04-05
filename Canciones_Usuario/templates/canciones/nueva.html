@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block title %}Nueva Canción{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Nueva Canción</h2>
+</div>
+
+<form method="POST" action="{{ url_for('cancion.nueva') }}">
+    <div class="form-group">
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="titulo" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="artista">Artista:</label>
+        <input type="text" id="artista" name="artista" required>
+    </div>
+    
+    <div class="form-actions">
+        <button type="submit" class="btn">Crear</button>
+    </div>
+</form>
+
+<div class="navigation">
+    <a href="{{ url_for('cancion.index') }}">Volver a Canciones</a>
+</div>
+{% endblock %}
+

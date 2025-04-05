@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block title %}Todos los Usuarios{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Todos los Usuarios</h2>
+    <a href="{{ url_for('usuario.nuevo') }}" class="btn">Nuevo Usuario</a>
+</div>
+
+<div class="user-list">
+    {% if usuarios %}
+        <ul>
+            {% for usuario in usuarios %}
+                <li>
+                    <a href="{{ url_for('usuario.mostrar', id=usuario.id) }}">{{ usuario.nombre }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay usuarios registrados.</p>
+    {% endif %}
+</div>
+
+<div class="navigation">
+    <a href="{{ url_for('index') }}">Inicio</a>
+</div>
+{% endblock %}
+

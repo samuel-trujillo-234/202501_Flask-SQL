@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Usuarios</title>
+</head>
+<body>
+    <h1>Usuarios</h1>
+    <a href="{{ url_for('usuarios.nuevo') }}">Nuevo Usuario</a>
+    <ul>
+        {% for usuario in usuarios %}
+        <li>
+            <a href="{{ url_for('usuarios.mostrar', id=usuario.id) }}">
+                {{ usuarios.nombre }} {{ usuarios.apellido }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

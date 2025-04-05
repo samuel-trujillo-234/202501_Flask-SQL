@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutoriza - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="dashboard-header">
+            <h1>Bienvenid@, {{ session['usuario_nombre'] }}</h1>
+            <div class="header-links">
+                <a href="/nueva" class="btn">Solicitar Asesoría</a>
+                <a href="/cerrar_sesion" class="btn">Cerrar Sesión</a>
+            </div>
+        </header>
+        
+        <main class="dashboard-content">
+            <h2>Todas las Asesorías</h2>
+            
+            {% with messages = get_flashed_messages(category_filter=["info"]) %}
+                {% if messages %}
+                    <div class="info-box">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
+            <div class="asesorias-list">
+                {% for asesoria in asesorias %}
+                    <div class="asesoria-card">
+                        <div class="asesoria-header">
+                            <h3>{{ asesoria.tema }}</h3>
+                            <p class="fecha">{{ asesoria.fecha.strftime('%d %B') if asesoria.fecha is not string else asesoria.fecha }}</p>
+                        </div>
+                        <div class="asesoria-details">
+                            <p><strong>Solicitante:</strong> {{ asesoria.solicitante_nombre }}</p>
+                            <p><strong>Duración:</strong> {{ asesoria.duracion }} horas</p>
+                            {% if asesoria.tutor_nombre %}
+                                <p><strong>Tutor:</strong> {{ asesoria.tutor_nombre }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="asesoria-actions">
+                            <a href="/ver/{{ asesoria.id }}" class="btn-small">Ver</a>
+                            {% if session['usuario_id'] == asesoria.usuario_id %}
+                                <a href="/editar/{{ asesoria.id }}" class="btn-small">Editar</a>
+                                <a href="/borrar/{{ asesoria.id }}" class="btn-small btn-danger">Borrar</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% else %}
+                    <p>No hay asesorías disponibles.</p>
+                {% endfor %}
+            </div>
+        </main>
+    </div>
+</body>
+</html>

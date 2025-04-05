@@ -1,0 +1,77 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{ usuario.nombre }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>{{ usuario.nombre }}</h2>
+</div>
+
+<div class="user-details">
+    <p><strong>Email:</strong> {{ usuario.email }}</p>
+</div>
+
+<div class="favorites-section">
+    <h3>Favoritos</h3>
+    
+    {% if canciones_favoritas %}
+        <table class="favorites-table">
+            <thead>
+                <tr>
+                    <th>Canción</th>
+                    <th>Artista</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cancion in canciones_favoritas %}
+                <tr>
+                    <td>{{ cancion.titulo }}</td>
+                    <td>{{ cancion.artista }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('favorito.eliminar') }}">
+                            <input type="hidden" name="usuario_id" value="{{ usuario.id }}">
+                            <input type="hidden" name="cancion_id" value="{{ cancion.id }}">
+                            <button type="submit" class="btn-small">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No tiene canciones favoritas.</p>
+    {% endif %}
+</div>
+
+<div class="add-favorite-section">
+    <h3>Agregar Favorito</h3>
+    
+    <form method="POST" action="{{ url_for('favorito.agregar') }}">
+        <input type="hidden" name="usuario_id" value="{{ usuario.id }}">
+        
+        <div class="form-group">
+            <label for="cancion_id">Canción:</label>
+            <select id="cancion_id" name="cancion_id" required>
+                {% for cancion in canciones %}
+                    <option value="{{ cancion.id }}">{{ cancion.titulo }} - {{ cancion.artista }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn">Agregar</button>
+        </div>
+    </form>
+</div>
+
+<div class="navigation">
+    <a href="{{ url_for('usuario.index') }}">Volver a Usuarios</a>
+    <a href="{{ url_for('usuario.editar', id=usuario.id) }}">Editar</a>
+    
+    <form method="POST" action="{{ url_for('usuario.eliminar', id=usuario.id) }}" class="inline-form">
+        <button type="submit" class="btn-danger" onclick="return confirm('¿Estás seguro de eliminar este usuario?')">Eliminar</button>
+    </form>
+</div>
+{% endblock %}
+

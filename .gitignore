@@ -1,0 +1,52 @@
+# Entorno virtual
+venv/
+ENV/
+env/
+.venv/
+
+# Archivos compilados de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos de logs
+*.log
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Configuración de VSCode
+.vscode/
+
+# Base de datos local o temporal
+*.sqlite3
+*.db
+
+# Archivos de entorno
+.env
+*.env
+
+# Archivos de Jupyter o notebooks
+*.ipynb_checkpoints
+
+# Archivos temporales de testing
+.pytest_cache/
+.tox/
+.coverage
+htmlcov/
+nosetests.xml
+coverage.xml
+
+# Node (si usás npm para frontend)
+node_modules/
+
+# Carpeta de dependencias del front
+dist/
+build/
+
+# Migraciones (si usás Flask-Migrate opcionalmente)
+migrations/
+
+# Archivos de configuración de PyInstaller
+*.spec

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutoriza - Solicitar Asesoría</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>Solicitar Asesoría</h1>
+            <div class="header-links">
+                <a href="/dashboard" class="btn">Inicio</a>
+                <a href="/cerrar_sesion" class="btn">Cerrar Sesión</a>
+            </div>
+        </header>
+        
+        <main class="form-content">
+            {% with messages = get_flashed_messages(category_filter=["asesoria"]) %}
+                {% if messages %}
+                    <div class="validation-box">
+                        <h3>Validaciones:</h3>
+                        <ul>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
+            <form action="/crear_asesoria" method="post">
+                <div class="form-group">
+                    <label for="tema">Tema:</label>
+                    <input type="text" id="tema" name="tema" required>
+                </div>
+                <div class="form-group">
+                    <label for="fecha">Fecha:</label>
+                    <input type="date" id="fecha" name="fecha" required>
+                </div>
+                <div class="form-group">
+                    <label for="duracion">Duración (horas):</label>
+                    <input type="number" id="duracion" name="duracion" min="1" max="8" required>
+                </div>
+                <div class="form-group">
+                    <label for="notas">Notas:</label>
+                    <textarea id="notas" name="notas" maxlength="50"></textarea>
+                    <small>Máximo 50 caracteres</small>
+                </div>
+                <div class="form-group">
+                    <label for="tutor_id">Tutor:</label>
+                    <select id="tutor_id" name="tutor_id">
+                        <option value="">Seleccionar tutor</option>
+                        {% for tutor in tutores %}
+                            <option value="{{ tutor.id }}">{{ tutor.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn">Guardar</button>
+            </form>
+            
+        </main>
+    </div>
+</body>
+</html>

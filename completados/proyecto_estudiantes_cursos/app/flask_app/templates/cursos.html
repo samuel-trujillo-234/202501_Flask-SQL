@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Cursos{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section">
+        <h2>Nuevo Curso</h2>
+        <form action="{{ url_for('cursos') }}" method="post">
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+            <button type="submit" class="btn">Crear Curso</button>
+        </form>
+    </div>
+    
+    <div class="section">
+        <h2>Todos los Cursos</h2>
+        <div class="cursos-list">
+            {% for curso in cursos %}
+            <div class="curso-item">
+                <a href="{{ url_for('mostrar_curso', curso_id=curso.id) }}">{{ curso.nombre }}</a>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="actions">
+            <a href="{{ url_for('nuevo_estudiante') }}" class="btn">Agregar Estudiante</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
