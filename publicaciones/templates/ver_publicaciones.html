@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutoriza - Ver Asesoría</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>{{ asesoria.tema }}</h1>
+            <div class="header-links">
+                <a href="/dashboard" class="btn">Inicio</a>
+                <a href="/cerrar_sesion" class="btn">Cerrar Sesión</a>
+            </div>
+        </header>
+        
+        <main class="view-content">
+            <div class="asesoria-details-full">
+                <p><strong>Solicitado por:</strong> {{ asesoria.solicitante_nombre }}</p>
+                <p><strong>Fecha:</strong> {{ asesoria.fecha }}</p>
+                <p><strong>Duración:</strong> {{ asesoria.duracion }} horas</p>
+                <p><strong>Notas:</strong> {{ asesoria.notas }}</p>
+            </div>
+            
+            <div class="tutor-section">
+                <h3>Tutor Actual: {{ asesoria.tutor_nombre if asesoria.tutor_nombre else 'No asignado' }}</h3>
+                
+                <form action="/cambiar_tutor" method="post">
+                    <input type="hidden" name="id" value="{{ asesoria.id }}">
+                    <div class="form-group">
+                        <label for="tutor_id">Cambiar Tutor:</label>
+                        <select id="tutor_id" name="tutor_id">
+                            {% for tutor in tutores %}
+                                <option value="{{ tutor.id }}" {% if tutor.id == asesoria.tutor_id %}selected{% endif %}>{{ tutor.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">Cambiar Tutor</button>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
