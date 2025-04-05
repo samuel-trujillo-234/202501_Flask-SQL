@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.usuario_model import Usuario
 
-usuario_controller = Blueprint('usuario', __name__, url_prefix='/usuarios')
+usuario_controller = Blueprint('usuarios', __name__, url_prefix='/usuarios')
 
 @usuario_controller.route('/')
 def index():
@@ -19,7 +19,7 @@ def nuevo():
         usuario = Usuario(nombre=nombre, apellido=apellido, email=email)
         usuario.create()
         
-        flash('Usuario creado exitosamente ¡Felicidades!')
+        flash('Usuario creado exitosamente.')
         return redirect(url_for('usuarios.index'))
     
     return render_template('usuarios/nuevo.html')

@@ -27,3 +27,20 @@ def update(self):
         params = (self.nombre, self.cantidad, self.relleno, self.id)
         self.db.execute_query(query, params)
         return True
+
+
+
+@staticmethod
+
+def validar_usuario(Pedidos):
+        es_valido = True 
+        if len(nombre['nombre']) < 3:
+                flash("el nombre debe tener al menos 3 caracteres") 
+                es_valido = False 
+        if len(apellido['apellido']) < 3:
+                flash("el apellido debe tener al menos 3 caracteres")
+                es_valido = False   
+        if len(email['email']) < 3:
+                flash("el email debe tener al menos 3 caracteres")
+                es_valido = False
+        return es_valido 

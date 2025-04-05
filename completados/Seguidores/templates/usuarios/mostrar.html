@@ -4,9 +4,14 @@
     <meta charset="UTF-8">
     <title>Detalles del Usuario</title>
 </head>
+<style>
+body{
+    color:black; /* Punto y coma agregado */
+}
+</style>
 <body>
-    <h1>{{ usuarios.nombre }} {{ usuarios.apellido }}</h1>
-    <p>Email: {{ usuarios.email }}</p>
+    <h1>nombre:{{ usuario.nombre }} {{ usuario.apellido }}</h1>
+    <p>Email: {{ usuario.email }}</p>
     <a href="{{ url_for('usuarios.index') }}">Volver</a>
 </body>
 </html>

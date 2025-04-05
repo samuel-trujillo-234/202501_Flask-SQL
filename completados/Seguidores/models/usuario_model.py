@@ -1,7 +1,7 @@
 from models.db import Database
 
 class Usuario:
-    def __init__(self, id=None, nombre=None, apellido=None ,email=None, password=None):
+    def __init__(self, id=None, nombre=None, apellido=None ,email=None):
         self.id = id
         self.nombre = nombre
         self.apellido = apellido
@@ -12,7 +12,7 @@ class Usuario:
         return self.db.fetch_all("SELECT * FROM usuarios")
     
     def get_by_id(self, id):
-        return self.db.fetch_one("SELECT * FROM usuarios WHERE id = %s", (id,))
+        return self.db.fetch_one("SELECT * FROM usuarios WHERE id = %s", (id))
     
     def create(self):
         query = "INSERT INTO usuarios (nombre, apellido, email) VALUES (%s, %s, %s)"

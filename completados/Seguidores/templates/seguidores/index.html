@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguidores</title>
+</head>
+<body>
+    <h1>Seguidores del Usuario {{ usuario_id }}</h1>
+    <ul>
+<!-- Itera sobre los seguidores y muestra sus datos -->
+        {% for seguidor in seguidores %}
+        <li>{{ seguidor.nombre }} {{ seguidor.apellido }} - {{ seguidor.email }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('seguidores.nuevo', usuario_id=usuario_id) }}">Añadir nuevo seguidor</a>
+</body>
+</html>
