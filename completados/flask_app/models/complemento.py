@@ -1,4 +1,4 @@
-from flask_app.config.mysqlconnection import connectToMySQL #importamos desde config
+from publicaciones.config.mysqlconnection import connectToMySQL #importamos desde config
 
 from flask_app.models import taco #Importamos la clase Taco
 

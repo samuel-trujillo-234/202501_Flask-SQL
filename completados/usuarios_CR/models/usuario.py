@@ -1,5 +1,8 @@
+import re
+from flask import flash
 from usuarios_CR.config.mysqlconnection import connectToMySQL
 
+EMAIL_REGEX = re.compile(r'^[\w\.-]+@[\w\.-]+\.\w+$')
 class Usuario:
     db_name = "esquema_usuarios"
 
@@ -44,3 +47,33 @@ class Usuario:
     def delete(cls, data):
         query = "DELETE FROM usuarios WHERE id = %(id)s;"
         return connectToMySQL(cls.db_name).query_db(query, data)
+
+    @classmethod
+    def validar_usuario(cls, datos):
+        es_valido = True
+
+        if len(datos["nombre"].strip()) == 0:
+            flash("El nombre no puede estar vacío", "error")
+            es_valido = False
+
+        if len(datos["apellido"].strip()) == 0:
+            flash("El apellido no puede estar vacío", "error")
+            es_valido = False
+
+        if len(datos["email"].strip()) == 0:
+            flash("El email no puede estar vacío", "error")
+            es_valido = False
+        elif not EMAIL_REGEX.match(datos["email"]):
+            flash("El formato del email no es válido", "error")
+            es_valido = False
+        elif cls.email_existe(datos["email"]):
+            flash("Este email ya está registrado", "error")
+            es_valido = False
+
+        return es_valido
+
+    @classmethod
+    def email_existe(cls, email):
+        query = "SELECT * FROM usuarios WHERE email = %(email)s;"
+        result = connectToMySQL(cls.db_name).query_db(query, {"email": email})
+        return len(result) > 0

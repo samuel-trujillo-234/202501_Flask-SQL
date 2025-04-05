@@ -1,5 +1,5 @@
 from flask_app.models import taco  # Importamos la clase Taco
-from flask_app.config.mysqlconnection import connectToMySQL  # Importamos la conexión a MySQL
+from publicaciones.config.mysqlconnection import connectToMySQL  # Importamos la conexión a MySQL
 
 class Restaurante:
     @classmethod

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect
-from app.models.usuario import Usuario
+from models.usuario import Usuario
 
 usuarios_bp = Blueprint('usuarios', __name__)
 
@@ -24,7 +24,11 @@ def crear_usuario():
         "apellido": request.form['apellido'],
         "email": request.form['email']
     }
+    if not Usuario.validar_usuario(datos):
+        session["form_data"] = datos
+        return redirect("/usuarios/nuevo")
     Usuario.save(datos)
+    session.pop("form_data", None) 
     return redirect('/usuarios')
 
 @usuarios_bp.route("/usuarios/editar/<int:id>")
