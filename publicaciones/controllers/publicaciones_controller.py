@@ -4,7 +4,7 @@ from publicaciones.models.usuarios_model import Usuario
 
 publicaciones_app = Blueprint('publicaciones', __name__)
 
-@publicaciones_app.route('/nueva')
+@publicaciones_app.route('/nueva_publicacion')
 def nueva_publicacion():
     if 'usuario_id' not in session:
         flash("El usuario debe haber iniciado sesión para ver esta página", "info")
@@ -21,7 +21,7 @@ def crear_publicacion():
         return redirect('/login')
     
     if not Publicacion.validar(request.form):
-        return redirect('/nueva')
+        return redirect('/nueva_publicacion')
     
     data = {
         'titulo': request.form['titulo'],
@@ -118,3 +118,12 @@ def cambiar_autor():
     Publicacion.update_autor(data)
     
     return redirect(f'/ver/{request.form["id"]}')
+
+@publicaciones_app.route('/dashboard')
+def dashboard():
+    if 'usuario_id' not in session:
+        flash("Por favor inicia sesión", "login")
+        return redirect('/login')
+    
+    publicaciones = Publicacion.get_all()  # Asegúrate de que este método funcione correctamente
+    return render_template('dashboard.html', publicaciones=publicaciones)

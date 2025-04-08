@@ -1,4 +1,4 @@
-from flask_app.config.mysqlconnection import connectToMySQL
+from publicaciones.config.mysqlconnection import connectToMySQL
 from flask import flash
 from datetime import datetime
 
@@ -24,11 +24,8 @@ class Publicacion:
     @classmethod
     def get_all(cls):
         query = "SELECT * FROM publicaciones;"
-        results = connectToMySQL(cls.db_name).query_db(query)
-        publicaciones = []
-        for publicacion in results:
-            publicaciones.append(cls(publicacion))
-        return publicaciones
+        results = connectToMySQL('esquema_publicaciones').query_db(query)
+        return results
 
     @classmethod
     def get_by_id(cls, id):

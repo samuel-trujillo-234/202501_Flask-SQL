@@ -34,7 +34,9 @@
                     <div class="asesoria-card">
                         <div class="asesoria-header">
                             <h3>{{ asesoria.tema }}</h3>
-                            <p class="fecha">{{ asesoria.fecha.strftime('%d %B') if asesoria.fecha is not string else asesoria.fecha }}</p>
+                            <p class="fecha">
+                                {{ asesoria.fecha.strftime('%d %B') if asesoria.fecha and asesoria.fecha != '' else 'Fecha no disponible' }}
+                            </p>
                         </div>
                         <div class="asesoria-details">
                             <p><strong>Solicitante:</strong> {{ asesoria.solicitante_nombre }}</p>
@@ -55,6 +57,15 @@
                     <p>No hay asesorías disponibles.</p>
                 {% endfor %}
             </div>
+
+            <h2>Publicaciones</h2>
+            <ul>
+                {% for publicacion in publicaciones %}
+                    <li>{{ publicacion.titulo }} - {{ publicacion.contenido }}</li>
+                {% else %}
+                    <li>No hay publicaciones disponibles.</li>
+                {% endfor %}
+            </ul>
         </main>
     </div>
 </body>

@@ -1,4 +1,4 @@
-from flask_app import app
+from publicaciones import app
 from flask import render_template, redirect, request, session, flash
 from publicaciones.models.publicaciones_model import Publicacion
 from publicaciones.models.usuarios_model import Usuario
@@ -74,6 +74,5 @@ def dashboard():
         flash("Por favor inicia sesión", "login")
         return redirect('/login')
     
-    asesorias = Asesoria.get_all_current()
-    
-    return render_template('dashboard.html', asesorias=asesorias)
+    publicaciones = Publicacion.get_all()  # Obtén todas las publicaciones
+    return render_template('dashboard.html', publicaciones=publicaciones)

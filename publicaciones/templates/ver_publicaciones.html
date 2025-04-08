@@ -11,8 +11,8 @@
         <header class="page-header">
             <h1>{{ asesoria.tema }}</h1>
             <div class="header-links">
-                <a href="/dashboard" class="btn">Inicio</a>
-                <a href="/cerrar_sesion" class="btn">Cerrar Sesión</a>
+                <a href="{{ url_for('dashboard') }}" class="btn">Inicio</a>
+                <a href="{{ url_for('cerrar_sesion') }}" class="btn">Cerrar Sesión</a>
             </div>
         </header>
         
@@ -27,7 +27,7 @@
             <div class="tutor-section">
                 <h3>Tutor Actual: {{ asesoria.tutor_nombre if asesoria.tutor_nombre else 'No asignado' }}</h3>
                 
-                <form action="/cambiar_tutor" method="post">
+                <form action="{{ url_for('cambiar_tutor') }}" method="post">
                     <input type="hidden" name="id" value="{{ asesoria.id }}">
                     <div class="form-group">
                         <label for="tutor_id">Cambiar Tutor:</label>

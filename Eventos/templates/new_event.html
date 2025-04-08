@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Nuevo Evento</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 20px;
+        }
+        .container {
+            max-width: 800px;
+        }
+        .form-container {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .flash-messages {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Crear Nuevo Evento</h1>
+            <div class="mb-3">
+                <a href="/dashboard" class="btn btn-secondary">Volver al Dashboard</a>
+                <a href="/logout" class="btn btn-outline-secondary">Cerrar Sesión</a>
+            </div>
+        </div>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="flash-messages alert alert-danger">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
+        
+        <div class="form-container">
+            <form action="/events/create" method="post">
+                <div class="form-group">
+                    <label for="name">Nombre del Evento:</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="location">Ubicación:</label>
+                    <input type="text" class="form-control" id="location" name="location" required>
+                </div>
+                <div class="form-group">
+                    <label for="date">Fecha:</label>
+                    <input type="date" class="form-control" id="date" name="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Detalles:</label>
+                    <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar Evento</button>
+            </form>
+            <div class="mt-3">
+                <small class="text-muted">
+                    El usuario debe tener un evento para participar o crear eventos.
+                    <br>Todos los campos son obligatorios.
+                    <br>Las fechas están restringidas a fechas futuras.
+                </small>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

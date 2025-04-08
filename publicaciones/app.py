@@ -1,3 +1,9 @@
+import sys
+import os
+
+# Agregar el directorio raíz al sys.path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from flask import Flask
 from publicaciones.controllers.publicaciones_controller import publicaciones_app
 
