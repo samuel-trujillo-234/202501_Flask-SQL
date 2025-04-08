@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Evento</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            padding-top: 20px;
+        }
+        .container {
+            max-width: 800px;
+        }
+        .event-container {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .participants-container {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .flash-messages {
+            margin-bottom: 15px;
+        }
+        .event-details {
+            margin-bottom: 20px;
+        }
+        .event-actions {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{ event.name }}</h1>
+            <div class="mb-3">
+                <a href="/dashboard" class="btn btn-secondary">Volver al Dashboard</a>
+                <a href="/logout" class="btn btn-outline-secondary">Cerrar Sesión</a>
+            </div>
+        </div>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="flash-messages alert alert-info">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
+        
+        <div class="event-container">
+            <div class="event-details">
+                <p><strong>Publicado por:</strong> {{ event.creator_name }}</p>
+                <p><strong>Fecha:</strong> {{ event.date.strftime('%d-%m-%Y') if event.date else '' }}</p>
+                <p><strong>Ubicación:</strong> {{ event.location }}</p>
+                <p><strong>Descripción:</strong> {{ event.description }}</p>
+            </div>
+            
+            <div class="event-actions">
+                {% if event.user_id == session.user_id %}
+                    <a href="/events/edit/{{ event.id }}" class="btn btn-warning">Editar</a>
+                    <a href="#" class="btn btn-danger" id="delete-event">Eliminar</a>
+                {% else %}
+                    {% set is_participant = False %}
+                    {% for participant in participants %}
+                        {% if participant.id == session.user_id %}
+                            {% set is_participant = True %}
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if is_participant %}
+                        <a href="#" class="btn btn-warning" id="leave-event">Abandonar Evento</a>
+                    {% else %}
+                        <a href="#" class="btn btn-success" id="join-event">Unirse al Evento</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="participants-container">
+            <h3>Participantes</h3>
+            <div id="participants-list">
+                {% if participants %}
+                    <ul class="list-group">
+                        {% for participant in participants %}
+                            <li class="list-group-item">{{ participant.name }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No hay participantes registrados aún.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            setInterval(function() {
+                $.ajax({
+                    url: '/api/events/{{ event.id }}/participants',
+                    type: 'GET',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            updateParticipantsList(response.participants);
+                        }
+                    }
+                });
+            }, 15000);
+            
+            $('#join-event').click(function(e) {
+                e.preventDefault();
+                
+                $.ajax({
+                    url: '/events/join/{{ event.id }}',
+                    type: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            location.reload();
+                        }
+                    }
+                });
+            });
+            
+            $('#leave-event').click(function(e) {
+                e.preventDefault();
+                
+                $.ajax({
+                    url: '/events/leave/{{ event.id }}',
+                    type: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            location.reload();
+                        }
+                    }
+                });
+            });
+            
+            $('#delete-event').click(function(e) {
+                e.preventDefault();
+                
+                if (confirm('¿Estás seguro de eliminar este evento?')) {
+                    $.ajax({
+                        url: '/events/delete/{{ event.id }}',
+                        type: 'GET',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                window.location.href = response.redirect;
+                            }
+                        }
+                    });
+                }
+            });
+            
+            function updateParticipantsList(participants) {
+                var participantsList = $('#participants-list');
+                participantsList.empty();
+                
+                if (participants.length > 0) {
+                    var ul = $('<ul>').addClass('list-group');
+                    
+                    participants.forEach(function(participant) {
+                        ul.append($('<li>').addClass('list-group-item').text(participant.name));
+                    });
+                    
+                    participantsList.append(ul);
+                } else {
+                    participantsList.append($('<p>').text('No hay participantes registrados aún.'));
+                }
+            }
+        });
+    </script>
+</body>
+</html>

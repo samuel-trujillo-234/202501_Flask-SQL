@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Eventos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            padding-top: 20px;
+        }
+        .container {
+            max-width: 1000px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .table-responsive {
+            margin-bottom: 20px;
+        }
+        .flash-messages {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Bienvenido, {{ user_name }}</h1>
+            <div>
+                <a href="/events/new" class="btn btn-primary">Crear Evento</a>
+                <a href="/logout" class="btn btn-secondary">Cerrar Sesión</a>
+            </div>
+        </div>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="flash-messages alert alert-info">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
+        
+        <div class="table-responsive">
+            <h3>Lista de Eventos</h3>
+            <table class="table table-striped" id="events-table">
+                <thead>
+                    <tr>
+                        <th>Nombre del Evento</th>
+                        <th>Ubicación</th>
+                        <th>Fecha</th>
+                        <th>Creado por</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                    <tr>
+                        <td>{{ event.name }}</td>
+                        <td>{{ event.location }}</td>
+                        <td>{{ event.date.strftime('%d-%m-%Y') if event.date else '' }}</td>
+                        <td>{{ event.creator_name }}</td>
+                        <td>
+                            <a href="/events/{{ event.id }}" class="btn btn-sm btn-info">Ver</a>
+                            {% if event.user_id == session.user_id %}
+                            <a href="/events/edit/{{ event.id }}" class="btn btn-sm btn-warning">Editar</a>
+                            <a href="#" class="btn btn-sm btn-danger delete-event" data-id="{{ event.id }}">Eliminar</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            setInterval(function() {
+                $.ajax({
+                    url: '/api/events',
+                    type: 'GET',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            updateEventsTable(response.events);
+                        }
+                    }
+                });
+            }, 30000);
+            
+            $(document).on('click', '.delete-event', function(e) {
+                e.preventDefault();
+                
+                if (confirm('¿Estás seguro de eliminar este evento?')) {
+                    var eventId = $(this).data('id');
+                    
+                    $.ajax({
+                        url: '/events/delete/' + eventId,
+                        type: 'GET',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                window.location.href = response.redirect;
+                            }
+                        }
+                    });
+                }
+            });
+            
+            function updateEventsTable(events) {
+                var tbody = $('#events-table tbody');
+                tbody.empty();
+                
+                events.forEach(function(event) {
+                    var row = $('<tr>');
+                    
+                    var date = new Date(event.date);
+                    var formattedDate = date.getDate().toString().padStart(2, '0') + '-' + 
+                                       (date.getMonth() + 1).toString().padStart(2, '0') + '-' + 
+                                       date.getFullYear();
+                    
+                    row.append($('<td>').text(event.name));
+                    row.append($('<td>').text(event.location));
+                    row.append($('<td>').text(formattedDate));
+                    row.append($('<td>').text(event.creator_name));
+                    
+                    var actions = $('<td>');
+                    actions.append($('<a>').attr('href', '/events/' + event.id).addClass('btn btn-sm btn-info').text('Ver'));
+                    
+                    if (event.user_id == {{ session.user_id }}) {
+                        actions.append(' ');
+                        actions.append($('<a>').attr('href', '/events/edit/' + event.id).addClass('btn btn-sm btn-warning').text('Editar'));
+                        actions.append(' ');
+                        var deleteBtn = $('<a>').attr('href', '#').addClass('btn btn-sm btn-danger delete-event').text('Eliminar').data('id', event.id);
+                        actions.append(deleteBtn);
+                    }
+                    
+                    row.append(actions);
+                    tbody.append(row);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
